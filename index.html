@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Eligibility Checker</title>
+    <style>
+        /* Global Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #cccccc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #007bff;
+            font-family: "Times New Roman";
+        }
+
+        /* Content Styling */
+        .content {
+            max-width: 800px;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: left;
+            margin: 20px auto;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 22px;
+            margin-top: 0;
+        }
+
+        /* Input and Button Styling */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+            text-align: left;
+        }
+
+        input[type="text"]:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* Result Styling */
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #343a40;
+            color: #f8f9fa;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>University Student Exam Details</h1>
+</div>
+<div class="content">
+    <h1>Check Eligibility</h1>
+    <input type="text" id="studentName" placeholder="Enter Student Name">
+    <button id="checkEligibility">Check Eligibility</button>
+    <div id="result"></div>
+</div>
+<div class="footer">
+    <p>&copy; 2024 University Eligibility Checker | Designed by University IT Team</p>
+</div>
+
+<script>
+    document.getElementById('checkEligibility').addEventListener('click', function() {
+        const studentName = document.getElementById('studentName').value;
+        const url = `http://localhost:8000/api/students/${studentName}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            })
+            .catch(error => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            });
+    });
+</script>
+
+</body>
+</html>
